@@ -1293,7 +1293,8 @@ int CDECL lame_get_samplerate(int mpeg_version, int table_index);
 
 /* maximum size of albumart image (128KB), which affects LAME_MAXMP3BUFFER
    as well since lame_encode_buffer() also returns ID3v2 tag data */
-#define LAME_MAXALBUMART    (128 * 1024)
+//#define LAME_MAXALBUMART    (128 * 1024)
+#define LAME_MAXALBUMART    0
 
 /* maximum size of mp3buffer needed if you encode at most 1152 samples for
    each call to lame_encode_buffer.  see lame_encode_buffer() below  

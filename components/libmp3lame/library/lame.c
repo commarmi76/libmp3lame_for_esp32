@@ -586,6 +586,7 @@ lame_init_params(lame_global_flags * gfp)
         return -2;      /* maybe error codes should be enumerated in lame.h ?? */
 
     if (NULL == gfc->sv_rpg.rgdata)
+ printf("Sizeof(replaygain_t): %d\n",sizeof(replaygain_t));
         gfc->sv_rpg.rgdata = calloc(1, sizeof(replaygain_t));
     if (NULL == gfc->sv_rpg.rgdata) {
         freegfc(gfc);

@@ -6,7 +6,6 @@
 #include "nvs_flash.h"
 #include "driver/gpio.h"
 #include "lame.h"
-#include "lame_test.h"
 
 esp_err_t event_handler(void *ctx, system_event_t *event)
 {
@@ -16,12 +15,7 @@ esp_err_t event_handler(void *ctx, system_event_t *event)
 void app_main(void)
 {
     nvs_flash_init();
-
-    printf("ESP32 SDK version:%s, RAM left %d\n", system_get_sdk_version(), system_get_free_heap_size());
-
     printf("get_lame_version(): %s\n", get_lame_version());
-
-    lameTest();
 /*
     gpio_set_direction(GPIO_NUM_4, GPIO_MODE_OUTPUT);
     int level = 0;
