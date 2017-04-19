@@ -356,8 +356,10 @@ iteration_init(lame_internal_flags * gfc)
         for (i = 1; i < PRECALC_SIZE; i++)
             adj43asm[i] = i - 0.5 - pow(0.5 * (pow43[i - 1] + pow43[i]), 0.75);
 #else
-        for (i = 0; i < PRECALC_SIZE - 1; i++)
+        for (i = 0; i < PRECALC_SIZE - 1; i++){
+        	if (0.5 * (pow43[i] + pow43[i + 1]) == 0) adj43[i] = (i + 1);
             adj43[i] = (i + 1) - pow(0.5 * (pow43[i] + pow43[i + 1]), 0.75);
+        }
         adj43[i] = 0.5;
 #endif
         for (i = 0; i < Q_MAX; i++)

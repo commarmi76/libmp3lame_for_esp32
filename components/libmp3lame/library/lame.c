@@ -47,6 +47,7 @@
 #include "VbrTag.h"
 #include "tables.h"
 
+#include "esp_heap_alloc_caps.h"
 
 #if defined(__FreeBSD__) && !defined(__alpha__)
 #include <floatingpoint.h>
@@ -586,13 +587,27 @@ lame_init_params(lame_global_flags * gfp)
         return -2;      /* maybe error codes should be enumerated in lame.h ?? */
 
     if (NULL == gfc->sv_rpg.rgdata)
- printf("Sizeof(replaygain_t): %d\n",sizeof(replaygain_t));
         gfc->sv_rpg.rgdata = calloc(1, sizeof(replaygain_t));
+
     if (NULL == gfc->sv_rpg.rgdata) {
         freegfc(gfc);
         gfp->internal_flags = NULL;
         return -2;
     }
+
+  //  gfc->sv_rpg.rgdata->A = calloc (12000, sizeof(uint32_t));
+    gfc->sv_rpg.rgdata->A = pvPortMallocCaps(12000*sizeof(uint32_t), MALLOC_CAP_32BIT);
+//    memset(gfc->sv_rpg.rgdata->A, 0, 12000*sizeof(sizeof(uint32_t)));
+ //   gfc->sv_rpg.rgdata->B = calloc (12000, sizeof(uint32_t));
+    gfc->sv_rpg.rgdata->B = pvPortMallocCaps(12000*sizeof(uint32_t), MALLOC_CAP_32BIT);
+//    memset(gfc->sv_rpg.rgdata->B, 0, 12000*sizeof(sizeof(uint32_t)));
+
+    for (int i=0; i<12000; i++)
+    {
+    	gfc->sv_rpg.rgdata->A[i]=0;
+    	gfc->sv_rpg.rgdata->B[i]=0;
+    }
+
 
     cfg->error_protection = gfp->error_protection;
     cfg->copyright = gfp->copyright;
@@ -965,7 +980,7 @@ lame_init_params(lame_global_flags * gfp)
 
     j = cfg->samplerate_index + (3 * cfg->version) + 6 * (cfg->samplerate_out < 16000);
     for (i = 0; i < SBMAX_l + 1; i++)
-        gfc->scalefac_band.l[i] = sfBandIndex[j].l[i];
+    	 gfc->scalefac_band.l[i] = sfBandIndex[j].l[i];
 
     for (i = 0; i < PSFB21 + 1; i++) {
         int const size = (gfc->scalefac_band.l[22] - gfc->scalefac_band.l[21]) / PSFB21;
@@ -1864,7 +1879,7 @@ lame_encode_buffer_template(lame_global_flags * gfp,
                             void const* buffer_l, void const* buffer_r, const int nsamples,
                             unsigned char *mp3buf, const int mp3buf_size, enum PCMSampleType pcm_type, int aa, FLOAT norm)
 {
-    if (is_lame_global_flags_valid(gfp)) {
+	   if (is_lame_global_flags_valid(gfp)) {
         lame_internal_flags *const gfc = gfp->internal_flags;
         if (is_lame_internal_flags_valid(gfc)) {
             SessionConfig_t const *const cfg = &gfc->cfg;
@@ -1875,12 +1890,14 @@ lame_encode_buffer_template(lame_global_flags * gfp,
             if (update_inbuffer_size(gfc, nsamples) != 0) {
                 return -2;
             }
+
             /* make a copy of input buffer, changing type to sample_t */
             if (cfg->channels_in > 1) {
                 if (buffer_l == 0 || buffer_r == 0) {
                     return 0;
                 }
                 lame_copy_inbuffer(gfc, buffer_l, buffer_r, nsamples, pcm_type, aa, norm);
+
             }
             else {
                 if (buffer_l == 0) {

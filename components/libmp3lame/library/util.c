@@ -31,11 +31,15 @@
 #include "encoder.h"
 #include "util.h"
 #include "tables.h"
+#include "gain_analysis.h"
 
 #define PRECOMPUTE
 #if defined(__FreeBSD__) && !defined(__alpha__)
 # include <machine/floatingpoint.h>
 #endif
+
+#include <ieeefp.h>
+#include <fenv.h>
 
 
 /***********************************************************************
@@ -140,6 +144,8 @@ freegfc(lame_internal_flags * const gfc)
         free(gfc->ATH);
     }
     if (gfc->sv_rpg.rgdata) {
+    	free(gfc->sv_rpg.rgdata->A);
+    	free(gfc->sv_rpg.rgdata->B);
         free(gfc->sv_rpg.rgdata);
     }
     if (gfc->sv_enc.in_buffer_0) {
@@ -835,14 +841,15 @@ disable_FPE(void)
 
 
 
+	//fedisableexcept(FE_DIVBYZERO | FE_INVALID);
 
 #if defined(__FreeBSD__) && !defined(__alpha__)
     {
         /* seet floating point mask to the Linux default */
-        fp_except_t mask;
+        fp_except mask;
         mask = fpgetmask();
         /* if bit is set, we get SIGFPE on that error! */
-        fpsetmask(mask & ~(FP_X_INV | FP_X_DZ));
+        fpsetmask(mask & ~(FP_X_INV | FP_X_DX)); // Invalid operation and  Divide by zero*/
         /*  DEBUGF("FreeBSD mask is 0x%x\n",mask); */
     }
 #endif

@@ -17,11 +17,12 @@ void app_main(void)
 {
     nvs_flash_init();
 
-    printf("ESP32 SDK version:%s, RAM left %d\n", system_get_sdk_version(), system_get_free_heap_size());
+    printf("ESP32 SDK version:%s, RAM left %d\n", esp_get_idf_version(), esp_get_free_heap_size());
 
     printf("get_lame_version(): %s\n", get_lame_version());
 
     lameTest();
+
 /*
     gpio_set_direction(GPIO_NUM_4, GPIO_MODE_OUTPUT);
     int level = 0;
