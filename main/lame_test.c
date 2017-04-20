@@ -18,9 +18,9 @@ void lameTest()
 {
  lame_t lame;
  unsigned int sampleRate = 16000;
- short int *pcm_samples;
+ short int *pcm_samples, *pcm_samples_end;
  int framesize = 0;
- int num_samples_encoded = 0;
+ int num_samples_encoded = 0, total=0;
  size_t free8start, free32start;
  const int nsamples=1152;
  unsigned char *mp3buf;
@@ -30,7 +30,7 @@ void lameTest()
  free32start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_32BIT);
  printf("pre lame_init() free mem8bit: %d mem32bit: %d\n",free8start,free32start);
 
- mp3buf=malloc(mp3buf_size);
+ mp3buf=malloc(mp3buf_size*sizeof(int));
 
  /* Init lame flags.*/
  lame = lame_init();
@@ -79,20 +79,22 @@ void lameTest()
 */
 
  pcm_samples = (short int *)Sample16kHz_raw_start;
+ pcm_samples_end = (short int *)Sample16kHz_raw_end;
 
- for (int j=0;j<10;j++)
+ while ( (pcm_samples_end - pcm_samples) > 0)
  {
-	 printf("\n=============== lame_encode_buffer_interleaved================ \n");
+//	 printf("\n=============== lame_encode_buffer_interleaved================ \n");
 
  /* encode samples. */
 
 	  num_samples_encoded = lame_encode_buffer_interleaved(lame, pcm_samples, nsamples, mp3buf, mp3buf_size);
 
-     printf("number of samples encoded = %d\n", num_samples_encoded);
+    // printf("number of samples encoded = %d\n", num_samples_encoded);
 
      /* check for value returned.*/
      if(num_samples_encoded > 1) {
-       printf("It seems the conversion was successful.\n");
+       //printf("It seems the conversion was successful.\n");
+    	 total+=num_samples_encoded;
      } else if(num_samples_encoded == -1) {
        printf("mp3buf was too small\n");
        return ;
@@ -105,28 +107,42 @@ void lameTest()
      } else if(num_samples_encoded == -4) {
        printf("Psycho acoustic problems.\n");
        return ;
-     } else if(num_samples_encoded == -11) {
-       printf("McM test\n");
-       return ;
      } else {
        printf("The conversion was not successful.\n");
        return ;
      }
 
 
-     printf("Contents of mp3buffer = ");
+    // printf("Contents of mp3buffer = ");
      for(int i = 0; i < num_samples_encoded; i++) {
-       printf("%d ", mp3buf[i]);
+       printf("%02X ", mp3buf[i]);
      }
 
-    pcm_samples += (nsamples*2);
+    pcm_samples += nsamples;  // nsamples*2 ????
 
  }
 
+/*
+ num_samples_encoded = lame_encode_flush(lame, mp3buf, mp3buf_size);
+ if(num_samples_encoded < 0) {
+   if(num_samples_encoded == -1) {
+     printf("mp3buffer is probably not big enough.\n");
+   } else {
+     printf("MP3 internal error.\n");
+   }
+   return ;
+ } else {
+     for(int i = 0; i < num_samples_encoded; i++) {
+       printf("%02X ", mp3buf[i]);
+     }
+     total += num_samples_encoded;
+  // printf("Flushing stage yielded %d frames.\n", num_samples_encoded);
+ }
+*/
 
 // =========================================================
 
-
+ printf ("Total size: %d",total);
  lame_close(lame);
  printf("\nClose\n");
 
