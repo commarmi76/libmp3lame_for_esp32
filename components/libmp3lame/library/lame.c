@@ -597,10 +597,10 @@ lame_init_params(lame_global_flags * gfp)
 
   //  gfc->sv_rpg.rgdata->A = calloc (12000, sizeof(uint32_t));
     gfc->sv_rpg.rgdata->A = pvPortMallocCaps(12000*sizeof(uint32_t), MALLOC_CAP_32BIT);
-//    memset(gfc->sv_rpg.rgdata->A, 0, 12000*sizeof(sizeof(uint32_t)));
+//    memset(gfc->sv_rpg.rgdata->A, 0, 12000*sizeof(uint32_t));
  //   gfc->sv_rpg.rgdata->B = calloc (12000, sizeof(uint32_t));
     gfc->sv_rpg.rgdata->B = pvPortMallocCaps(12000*sizeof(uint32_t), MALLOC_CAP_32BIT);
-//    memset(gfc->sv_rpg.rgdata->B, 0, 12000*sizeof(sizeof(uint32_t)));
+//    memset(gfc->sv_rpg.rgdata->B, 0, 12000*sizeof(uint32_t));
 
     for (int i=0; i<12000; i++)
     {
