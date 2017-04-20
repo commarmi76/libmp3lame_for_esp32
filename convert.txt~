@@ -1,4 +1,0 @@
-ffmpeg -i Sample16kHz.wav -f s16le -acodec pcm_s16be -t 10 Sample16kHz.raw
-
-s16le = signed 16 bits little-endian
--t 10 = to cut 10 secons

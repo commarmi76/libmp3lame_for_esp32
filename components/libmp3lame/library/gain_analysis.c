@@ -286,7 +286,13 @@ ResetSampleFrequency(replaygain_t * rgData, long samplefreq)
     rgData->totsamp = 0;
 
     //memset(rgData->A, 0, sizeof(rgData->A));
-    memset(rgData->A, 0, 12000*sizeof(sizeof(uint32_t)));
+    //memset(rgData->A, 0, 12000*sizeof(uint32_t));
+
+    for (int i=0; i<12000; i++)
+    {
+    	gfc->sv_rpg.rgdata->A[i]=0;
+    }
+
 
     return INIT_GAIN_ANALYSIS_OK;
 }
@@ -306,7 +312,12 @@ InitGainAnalysis(replaygain_t * rgData, long samplefreq)
     rgData->rout = rgData->routbuf + MAX_ORDER;
 
     //memset(rgData->B, 0, sizeof(rgData->B));
-    memset(rgData->B, 0, 12000*sizeof(sizeof(uint32_t)));
+    //memset(rgData->B, 0, 12000*sizeof(uint32_t));
+
+    for (int i=0; i<12000; i++)
+    {
+    	gfc->sv_rpg.rgdata->B[i]=0;
+    }
 
     return INIT_GAIN_ANALYSIS_OK;
 }
