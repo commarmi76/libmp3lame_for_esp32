@@ -290,7 +290,7 @@ ResetSampleFrequency(replaygain_t * rgData, long samplefreq)
 
     for (int i=0; i<12000; i++)
     {
-    	gfc->sv_rpg.rgdata->A[i]=0;
+    	rgData->A[i]=0;
     }
 
 
@@ -316,7 +316,7 @@ InitGainAnalysis(replaygain_t * rgData, long samplefreq)
 
     for (int i=0; i<12000; i++)
     {
-    	gfc->sv_rpg.rgdata->B[i]=0;
+    	rgData->B[i]=0;
     }
 
     return INIT_GAIN_ANALYSIS_OK;
