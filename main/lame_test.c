@@ -11,9 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "machine.h"
-#define Q_MAX (256+1)
-extern FLOAT ipow20[Q_MAX];
+//#include <time.h>
+#include <sys/time.h>
 
 extern const uint8_t Sample16kHz_raw_start[] asm("_binary_Sample16kHz_raw_start");
 extern const uint8_t Sample16kHz_raw_end[]   asm("_binary_Sample16kHz_raw_end");
@@ -24,11 +23,12 @@ void lameTest()
  unsigned int sampleRate = 16000;
  short int *pcm_samples, *pcm_samples_end;
  int framesize = 0;
- int num_samples_encoded = 0, total=0;
+ int num_samples_encoded = 0, total=0, frames=0;
  size_t free8start, free32start;
  int nsamples=1152;
  unsigned char *mp3buf;
  const int mp3buf_size=2000;  //mp3buf_size in bytes = 1.25*num_samples + 7200
+ struct timeval tvalBefore, tvalFirstFrame, tvalAfter;
 
   free8start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_8BIT);
  free32start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_32BIT);
@@ -85,15 +85,19 @@ void lameTest()
  pcm_samples = (short int *)Sample16kHz_raw_start;
  pcm_samples_end = (short int *)Sample16kHz_raw_end;
 
+
+ gettimeofday (&tvalBefore, NULL);
  while ( pcm_samples_end - pcm_samples > 0)
  //for (int j=0;j<1;j++)
  {
-	     printf("\n=============== lame_encode_buffer_interleaved================ \n");
+	   //  printf("\n=============== lame_encode_buffer_interleaved================ \n");
  /* encode samples. */
 
 	  num_samples_encoded = lame_encode_buffer_interleaved(lame, pcm_samples, nsamples, mp3buf, mp3buf_size);
 
-     printf("number of samples encoded = %d pcm_samples %p \n", num_samples_encoded, pcm_samples);
+  //   printf("number of samples encoded = %d pcm_samples %p \n", num_samples_encoded, pcm_samples);
+
+	  if (total==0) gettimeofday (&tvalFirstFrame, NULL);
 
      /* check for value returned.*/
      if(num_samples_encoded > 1) {
@@ -118,13 +122,29 @@ void lameTest()
 
 
     // printf("Contents of mp3buffer = ");
-     for(int i = 0; i < num_samples_encoded; i++) {
+  /*   for(int i = 0; i < num_samples_encoded; i++) {
     	 printf("%02X", mp3buf[i]);
      }
-
+*/
     pcm_samples += (nsamples*2);  // nsamples*2 ????
+    frames++;
 
  }
+
+ gettimeofday (&tvalAfter, NULL);
+
+ printf("Fist Frame time in microseconds: %ld microseconds\n",
+             ((tvalFirstFrame.tv_sec - tvalBefore.tv_sec)*1000000L
+            +tvalFirstFrame.tv_usec) - tvalBefore.tv_usec
+           );
+
+
+ printf("Total time in microseconds: %ld microseconds\n",
+             ((tvalAfter.tv_sec - tvalBefore.tv_sec)*1000000L
+            +tvalAfter.tv_usec) - tvalBefore.tv_usec
+           );
+
+ printf ("Total frames: %d TotalBytes: %d\n", frames, total);
 
 /*
  num_samples_encoded = lame_encode_flush(lame, mp3buf, mp3buf_size);
