@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#include <time.h>
 #include <sys/time.h>
 
 extern const uint8_t Sample16kHz_raw_start[] asm("_binary_Sample16kHz_raw_start");
@@ -75,12 +74,6 @@ void lameTest()
  framesize = lame_get_framesize(lame);
  printf("Framesize = %d\n", framesize);
 // assert(framesize <= 1152);
-
-/*
- printf("Sample16kHz.raw start: %p", Sample16kHz_raw_start);
- printf(" end: %p", Sample16kHz_raw_end);
- printf(" with size: %d\n", Sample16kHz_raw_end-Sample16kHz_raw_start);
-*/
 
  pcm_samples = (short int *)Sample16kHz_raw_start;
  pcm_samples_end = (short int *)Sample16kHz_raw_end;

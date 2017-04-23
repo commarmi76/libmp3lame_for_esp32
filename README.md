@@ -1,5 +1,5 @@
 # libmp3lame_for_esp32
-Experiments to port lame mp3 encoder to exp32
+Experiments to port lame mp3 encoder to esp32
 
 Original sources by the authors of LAME: http://www.sourceforge.net/projects/lame
 
