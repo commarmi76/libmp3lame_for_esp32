@@ -5,18 +5,22 @@ Original sources by the authors of LAME: http://www.sourceforge.net/projects/lam
 
 
 First benchmark:
-Encode Sample16kHz.raw (little-endian) data, 16 bit, stereo 16000 Hz
+Encode Sample16kHz.raw (little-endian) data, 16 bit, stereo 16000 Hz 10 seconds
 
 1. Without CFLAGS:
 7925057 microseconds
 
-2. With CFLAGS += -Wno-unused-function -DHAVE_EXPAT_CONFIG_H -O3 -ffast-math
+2. With CFLAGS += -O3 -ffast-math:
 7885191 microseconds
 
-3. With CFLAGS (see above) and TAKEHIRO_IEEE754_HACK
+3. With CFLAGS (see above) and TAKEHIRO_IEEE754_HACK:
 8468706 microseconds
 
-So, the best option is 1,26 realtime. 
+4. With CFLAGS and release mode
+7220642 microseconds
+
+
+So, the best option is (4): 1,38x realtime. 
 
 TODO:
 - Encode something infinite to check memory leaks
@@ -26,6 +30,7 @@ TODO:
 
 
 =================================================================================
+
 Using the LAME encoding engine (or other mp3 encoding technology) in your software 
 may require a patent license in some countries.
 

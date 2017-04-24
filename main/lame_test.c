@@ -66,7 +66,8 @@ void lameTest()
 
 
  free8start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_8BIT);
- printf("post lame_init_params() free mem: %d\n",free8start);
+ free32start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_32BIT);
+ printf("post lame_init_params() free mem8bit: %d mem32bit: %d\n",free8start,free32start);
 
 // lame_print_config(lame);
 // lame_print_internals(lame);

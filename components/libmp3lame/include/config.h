@@ -1,5 +1,5 @@
-/* expat_config.h.  Generated from expat_config.h.in by configure.  */
-/* expat_config.h.in.  Generated from configure.ac by autoheader.  */
+#ifndef LAME_CONFIG_H
+#define LAME_CONFIG_H
 
 /* 1234 = LIL_ENDIAN, 4321 = BIGENDIAN */
 #define BYTEORDER 1234
@@ -84,3 +84,5 @@
 #undef HAVE_XMMINTRIN_H
 
 #undef TAKEHIRO_IEEE754_HACK
+
+#endif
