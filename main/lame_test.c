@@ -123,6 +123,15 @@ void lameTest()
     pcm_samples += (nsamples*2);  // nsamples*2 ????
     frames++;
 
+#if 0
+    // to test infinite loop
+    if ( pcm_samples_end - pcm_samples <= 0){
+    	pcm_samples = (short int *)Sample16kHz_raw_start;
+    	free8start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_8BIT);
+    	free32start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_32BIT);
+    	printf("LOOP: free mem8bit: %d mem32bit: %d frames encoded: %d bytes:%d\n",free8start,free32start,frames,total);
+    }
+#endif
  }
 
  gettimeofday (&tvalAfter, NULL);
@@ -160,7 +169,6 @@ void lameTest()
 
 // =========================================================
 
- printf ("Total size: %d",total);
  lame_close(lame);
  printf("\nClose\n");
 

@@ -36,6 +36,7 @@ Isn't such a exhaustive test but enough for now.
 =================================================================================
 TODO:
 - Encode something infinite to check memory leaks (partially done)
+- Investigate why CONFIG_ENABLE_MEMORY_DEBUG=y crashes the system
 - Profile to find the heaviest parts
 - Investigate esp32 dsp features: Vectra LX DSP Engine, MAC16
 - Streaming over tcp and http
