@@ -16,7 +16,7 @@ Encode Sample16kHz.raw (little-endian) data, 16 bit, stereo 16000 Hz 10 seconds
 3. With CFLAGS (see above) and TAKEHIRO_IEEE754_HACK:
 8468706 microseconds
 
-4. With CFLAGS and release mode
+4. With CFLAGS and release mode:
 7220642 microseconds
 
 
@@ -26,7 +26,9 @@ So, the best option is (4): 1,38x realtime.
 Encode the same file for more than an hour:
 
 LOOP: free mem8bit: 11720 mem32bit: 19992 frames encoded: 139 bytes:99084
+
 ...
+
 LOOP: free mem8bit: 11720 mem32bit: 19992 frames encoded: 88543 bytes:63669828
 
 Isn't such a exhaustive test but enough for now.
