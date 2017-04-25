@@ -3,7 +3,7 @@ Experiments to port lame mp3 encoder to esp32
 
 Original sources by the authors of LAME: http://www.sourceforge.net/projects/lame
 
-
+=================================================================================
 First benchmark:
 Encode Sample16kHz.raw (little-endian) data, 16 bit, stereo 16000 Hz 10 seconds
 
@@ -22,8 +22,18 @@ Encode Sample16kHz.raw (little-endian) data, 16 bit, stereo 16000 Hz 10 seconds
 
 So, the best option is (4): 1,38x realtime. 
 
+=================================================================================
+Encode the same file for more than an hour:
+
+LOOP: free mem8bit: 11720 mem32bit: 19992 frames encoded: 139 bytes:99084
+...
+LOOP: free mem8bit: 11720 mem32bit: 19992 frames encoded: 88543 bytes:63669828
+
+Isn't such a exhaustive test but enough for now.
+
+=================================================================================
 TODO:
-- Encode something infinite to check memory leaks
+- Encode something infinite to check memory leaks (partially done)
 - Profile to find the heaviest parts
 - Investigate esp32 dsp features: Vectra LX DSP Engine, MAC16
 - Streaming over tcp and http
