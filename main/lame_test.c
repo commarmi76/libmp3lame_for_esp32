@@ -7,7 +7,7 @@
 #include <esp_types.h>
 #include <stdio.h>
 #include "rom/ets_sys.h"
-#include "esp_heap_alloc_caps.h"
+#include "esp_heap_caps.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -29,8 +29,8 @@ void lameTest()
  const int mp3buf_size=2000;  //mp3buf_size in bytes = 1.25*num_samples + 7200
  struct timeval tvalBefore, tvalFirstFrame, tvalAfter;
 
-  free8start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_8BIT);
- free32start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_32BIT);
+  free8start=heap_caps_get_free_size(MALLOC_CAP_8BIT);
+ free32start=heap_caps_get_free_size(MALLOC_CAP_32BIT);
  printf("pre lame_init() free mem8bit: %d mem32bit: %d\n",free8start,free32start);
 
  mp3buf=malloc(mp3buf_size);
@@ -38,8 +38,8 @@ void lameTest()
  /* Init lame flags.*/
  lame = lame_init();
 
- free8start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_8BIT);
- free32start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_32BIT);
+ free8start=heap_caps_get_free_size(MALLOC_CAP_8BIT);
+ free32start=heap_caps_get_free_size(MALLOC_CAP_32BIT);
  printf("post lame_init() free mem8bit: %d mem32bit: %d\n",free8start,free32start);
 
  if(!lame) {
@@ -65,8 +65,8 @@ void lameTest()
  else printf("OK setting internal parameters\n");
 
 
- free8start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_8BIT);
- free32start=xPortGetFreeHeapSizeCaps(MALLOC_CAP_32BIT);
+ free8start=heap_caps_get_free_size(MALLOC_CAP_8BIT);
+ free32start=heap_caps_get_free_size(MALLOC_CAP_32BIT);
  printf("post lame_init_params() free mem8bit: %d mem32bit: %d\n",free8start,free32start);
 
 // lame_print_config(lame);
@@ -116,10 +116,10 @@ void lameTest()
 
 
     // printf("Contents of mp3buffer = ");
-  /*   for(int i = 0; i < num_samples_encoded; i++) {
+/*     for(int i = 0; i < num_samples_encoded; i++) {
     	 printf("%02X", mp3buf[i]);
-     }
-*/
+     } */
+
     pcm_samples += (nsamples*2);  // nsamples*2 ????
     frames++;
 
